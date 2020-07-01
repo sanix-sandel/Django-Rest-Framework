@@ -47,6 +47,7 @@ class GameSerializer(serializers.HyperlinkedModelSerializer):
 class ScoreSerializer(serializers.HyperlinkedModelSerializer):
     #Display all the details for the game
     game=GameSerializer()
+    
     class Meta:
         model=PlayerScore
         fields=(
@@ -55,10 +56,12 @@ class ScoreSerializer(serializers.HyperlinkedModelSerializer):
             'score',
             'score_date',
             'game',
+            
         )
 #We don't include the 'player' field name in
 #the fields tuple of string to avoid serializing the player again.
-#         
+#Because in PlayerSerializer there's already score, so if score has player
+# it will become nesty    
 
 class PlayerSerializer(serializers.HyperlinkedModelSerializer):
     scores=ScoreSerializer(many=True, read_only=True)
