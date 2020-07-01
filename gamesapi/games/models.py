@@ -14,7 +14,7 @@ class GameCategory(models.Model):
 class Game(models.Model):
     created=models.DateTimeField(auto_now_add=True)
     name=models.CharField(max_length=200)
-    release_date=models.DateTimeField()
+    release_date=models.DateTimeField(auto_now_add=True)
     game_category=models.ForeignKey(GameCategory, 
         related_name='games', 
         on_delete=models.CASCADE)
@@ -38,7 +38,7 @@ class Player(models.Model):
     )       
     created=models.DateTimeField(auto_now_add=True)
     name=models.CharField(max_length=50, blank=False, default='')
-    genre=models.CharField(
+    gender=models.CharField(
         max_length=2,
         choices=GENDER_CHOICES,
         default=MALE,
@@ -59,7 +59,7 @@ class PlayerScore(models.Model):
         on_delete=models.CASCADE
     )                
     score=models.IntegerField()
-    score_date=models.DateTimeField()
+    score_date=models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering=('-score',)

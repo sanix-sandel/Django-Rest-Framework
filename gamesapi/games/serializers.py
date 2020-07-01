@@ -37,7 +37,7 @@ class GameSerializer(serializers.HyperlinkedModelSerializer):
             'url',
             'game_category',
             'name',
-            'related_date',
+            'release_date',
             'played',
         )
 
@@ -84,7 +84,7 @@ class PlayerSerializer(serializers.HyperlinkedModelSerializer):
 # 
 #         
 class PlayerScoreSerializer(serializers.ModelSerializer):
-    Player=serializers.SlugRelatedField(queryset=Player.objects.all(),
+    player=serializers.SlugRelatedField(queryset=Player.objects.all(),
         slug_field='name'    
     )
     game=serializers.SlugRelatedField(queryset=Game.objects.all(), 
