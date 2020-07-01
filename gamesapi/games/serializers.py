@@ -11,7 +11,9 @@ class GameCategorySerializer(serializers.HyperlinkedModelSerializer):
         read_only=True,
         view_name='game-detail'
     )
-
+    #The view_name value is ' game-detail ' because we want the 
+    # browsable API feature to use the game detail
+    #view to render the hyperlink when the user clicks or taps on it.
     class Meta:
         model=GameCategory
         fields=(
@@ -20,7 +22,7 @@ class GameCategorySerializer(serializers.HyperlinkedModelSerializer):
             'name',
             'games'#from the related name with games
         )
-
+#'url' GameCategoryList
 #We use the games name that we
 #specified as the related_name string value when 
 #we created the game_category field as a
