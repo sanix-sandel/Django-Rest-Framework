@@ -4,6 +4,9 @@ from games.models import Game
 from games.models import Player
 from .models import PlayerScore
 import games.views
+from django.contrib.auth.models import User
+
+
 
 class GameCategorySerializer(serializers.HyperlinkedModelSerializer):
     games=serializers.HyperlinkedRelatedField(
@@ -30,13 +33,17 @@ class GameCategorySerializer(serializers.HyperlinkedModelSerializer):
 
 
 class GameSerializer(serializers.HyperlinkedModelSerializer):
+    # We just want to display the owner username (read-only)
+    owner=serializers.ReadOnlyField(source='owner.username')
     game_category=serializers.SlugRelatedField(queryset=GameCategory.objects.all(),
         slug_field='name'    
     )#retrieve the game category's name instead of the id
     class Meta:
         model=Game
+        depth=4
         fields=(
             'url',
+            'owner',
             'game_category',
             'name',
             'release_date',
@@ -60,7 +67,8 @@ class ScoreSerializer(serializers.HyperlinkedModelSerializer):
         )
 #We don't include the 'player' field name in
 #the fields tuple of string to avoid serializing the player again.
-#Because in PlayerSerializer there's already score, so if score has player
+#Because in PlayerSerializer there's already score, score is ScoreSerializer
+# so if score has player
 # it will become nesty    
 
 class PlayerSerializer(serializers.HyperlinkedModelSerializer):
@@ -106,3 +114,23 @@ class PlayerScoreSerializer(serializers.ModelSerializer):
             'player',
             'game',
         )
+
+class UserGameSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model=Game
+        fields=(
+            'url',
+            'name'
+        )        
+
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    games=UserGameSerializer(many=True, read_only=True)
+
+    class Meta:
+        model=User
+        fields=(
+            'url',
+            'pk',
+            'username',
+            'games'
+        )                

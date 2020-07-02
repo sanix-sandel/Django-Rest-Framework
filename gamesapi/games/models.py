@@ -1,8 +1,9 @@
 from django.db import models
 
 
+
 class GameCategory(models.Model):
-    name=models.CharField(max_length=200)
+    name=models.CharField(max_length=200, unique=True)
 
     class Meta:
         ordering=('name',)
@@ -12,8 +13,13 @@ class GameCategory(models.Model):
 
 
 class Game(models.Model):
+    owner=models.ForeignKey(
+        'auth.User',
+        related_name='games',
+        on_delete=models.CASCADE
+    )
     created=models.DateTimeField(auto_now_add=True)
-    name=models.CharField(max_length=200)
+    name=models.CharField(max_length=200, unique=True)
     release_date=models.DateTimeField(auto_now_add=True)
     game_category=models.ForeignKey(GameCategory, 
         related_name='games', 
@@ -37,7 +43,7 @@ class Player(models.Model):
 
     )       
     created=models.DateTimeField(auto_now_add=True)
-    name=models.CharField(max_length=50, blank=False, default='')
+    name=models.CharField(max_length=50, blank=False, default='', unique=True)
     gender=models.CharField(
         max_length=2,
         choices=GENDER_CHOICES,
@@ -63,3 +69,4 @@ class PlayerScore(models.Model):
 
     class Meta:
         ordering=('-score',)
+
